@@ -1,0 +1,34 @@
+:root {
+    --square_size: 15px
+}
+
+.grid {
+    /* color: antiquewhite; */
+    display: grid;
+    grid-template-columns: repeat(35, 1fr);
+    gap: 2px;
+}
+
+.grid-item {
+    background-color:white;
+    text-align: center;
+    float: left;
+    font-size: 8px;
+    /* border-radius: 3%; */
+    padding: none;
+    border: 1px solid black;
+    width: var(--square_size);
+    height: var(--square_size);
+}
+
+.container {
+    /* background-color:rgb(red, green, blue); */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding: 4px;
+    margin: 10px;
+    border: 1px solid black;
+}
+.center {
+    text-align: center;
+}

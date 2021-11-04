@@ -1,24 +1,47 @@
 
-const sleep = t => new Promise(s => setTimeout(s, t));
+
 
 class Solution {
 
+    async traversePath(square) {
+        while (square!=null) {
+            await sleep(2);
+            square.pathElement();
+            square = square.beforeElement;
+        }
+    }
 
     async dfs() {
-
+        let i = startIndex[0];
+        let j = startIndex[1];
+        let stack = [];
+        stack.push([squares[i][j], null]);
+        while (stack.length!=0) {
+            let top = stack.pop()
+            let topSquare = top[0]
+            if (topSquare == null || topSquare.visited || topSquare.isWall())
+                continue;
+            await sleep(5)
+            topSquare.beforeElement = top[1]
+            topSquare.visited = true
+            topSquare.select()
+            if (topSquare.isEnd){
+                this.traversePath(topSquare.beforeElement);
+                return;
+            }
+            stack.push([topSquare.up, topSquare]);
+            stack.push([topSquare.right, topSquare]);
+            stack.push([topSquare.down, topSquare]);
+            stack.push([topSquare.left, topSquare]);
+        }
     }
 
     async bfs() {
-        console.log('--------------------------------')
-        console.log('starting Breath First Search --/|\\/\\--')
         let i = startIndex[0];
         let j = startIndex[1];
-        console.log('lets go')
         let queue = [];
         queue.push([squares[i][j], null]);
         console.log(squares[i][j],' ', i, j)
-        // sq
-        console.log(' 1 2 3 >>>>>')
         while (queue.length!=0)
         {
             let size = queue.length;
@@ -32,13 +55,7 @@ class Solution {
                     continue;
                 topSquare.beforeElement = top[1];
                 if (topSquare.isEnd) {
-                    console.log('found end')
-                    let ptr = topSquare.beforeElement;
-                    while (ptr != null) {
-                        await sleep(2);
-                        ptr.pathElement();
-                        ptr = ptr.beforeElement;
-                    }
+                    this.traversePath(topSquare.beforeElement)
                     return;
                 }
                 topSquare.select();
@@ -57,4 +74,10 @@ class Solution {
             }
         }
     }
+
+    async aStar() {
+        ;
+    }
 }
+
+asphalt  = new Solution()

@@ -29,6 +29,8 @@ class Square {
     }
 
     clear() {
+        this.visited = false;
+        this.wall = false;
         if (this.isStart || this.isEnd) return;
         $(this.element).css('background-color','white');
     }
@@ -46,8 +48,8 @@ class Square {
     }
 
     deselect() {
+        this.visited = false;
         if (this.isStart || this.isEnd || this.wall){
-            console.log('asdf')
             return;
         }
         $(this.element).css('background-color','white');
@@ -57,6 +59,10 @@ class Square {
         this.isStart = true;
         this.isEnd = false;
     }
+
+
+
+
 
     end() {
         $(this.element).css('background-color','red');

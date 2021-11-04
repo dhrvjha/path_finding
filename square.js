@@ -1,10 +1,4 @@
 
-let sizeX;
-let sizeY;
-let startIndex=undefined;
-let endIndex=undefined;
-let squares = [[]];
-
 function defineUpLeft(grid_item){
     for (let i=0;i<sizeY;i++) {
         squares[i] = []
@@ -62,18 +56,14 @@ function clearSelection() {
 function setRandomMazeGenerator() {
     $('#maze').click(function() {
         clearSelection();
-        let limit = (sizeX*sizeY)/2
-        for (let i=0;i<limit;i++) {
-            let x = parseInt(Math.random() * sizeX);
-            let y = parseInt(Math.random() * sizeY);
-            squares[y][x].toggleColor();
-        }
+        maze.wallSides();
     })
 }
 
 function setStartButton() {
     $('#start').click(function() {
-        let _asphalt = new Solution().bfs();
+        console.log('start')
+        asphalt.dfs();
     })
 }
 
@@ -90,7 +80,7 @@ function setClear() {
 function init(){
     // console.log('resizing')
 
-    sizeX = parseInt(($(document).width()-2*10-2*4)/(15+2+3));
+    sizeX = parseInt(($(document).width()-2*4)/(15+2+3));
     sizeY = parseInt($(document).height()/35);
     setBoxes();
     setStart();
@@ -102,4 +92,4 @@ function init(){
 
 
 $(document).ready(function() {init()})
-// $(document).ready(function(){$(window).resize(init)})
+$(document).ready(function(){$(window).resize(init)})

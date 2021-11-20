@@ -31,7 +31,22 @@ class Maze {
         }
     }
 
-    horizonatalRandom() {
+    async horizonatalRandom() {
+        let partiton = 1;
+        for (let i=2;i<sizeY-2;i+=(partiton%2)+2) {
+            // let divisor = Math.max(4,Math.floor(Math.random()*15));
+            partiton = (partiton)%4+2;
+            let divisor = Math.floor(sizeX/partiton);
+            for (let j=1;j<sizeX-1;j++) {
+                if (j%divisor == 0)
+                    continue;
+                squares[i][j].toggleColor()
+                await sleep(1);
+            }
+        }
+    }
+
+    async verticalRandom() {
         ;
     }
 

@@ -6,7 +6,7 @@ function defineUpLeft(grid_item){
             let id = j+(i*sizeX)
             grid_item.append('<div id=\''+id+'\' class=\'grid-item\'></div>')
             try {
-                squares[i][j] = new Square(('#'+id), i==0?null:squares[i-1][j], j==0?null:squares[i][j-1])
+                squares[i][j] = new Square($(`#${id}`), i==0?null:squares[i-1][j], j==0?null:squares[i][j-1], i, j)
             } catch (error) {
                 console.log(i + ' - ' + j + ' - ' + error)
                 return
@@ -33,15 +33,15 @@ function setBoxes() {
 }
 
 function setStart() {
-    if (startIndex!==undefined) return
-    startIndex = [parseInt((sizeY-1)/2), parseInt((sizeX)/10)];
+
+    startIndex = [parseInt(Math.random()*(sizeY-1)), parseInt((Math.random()*10))];
 
     squares[startIndex[0]][startIndex[1]].start();
 }
 
 function setEnd() {
-    if (endIndex!==undefined)   return
-    endIndex = [parseInt((sizeY-1)/2), parseInt((sizeX-1))]
+
+    endIndex = [parseInt(Math.random()*(sizeY-1)), parseInt((sizeX-(Math.random()*10)))]
     squares[endIndex[0]][endIndex[1]].end();
 }
 
@@ -54,16 +54,55 @@ function clearSelection() {
 }
 
 function setRandomMazeGenerator() {
-    $('#maze').click(function() {
+    IDHorizonatalMazeTag.click(function() {
         clearSelection();
-        maze.wallSides();
+        maze.wallSides().then(result => maze.horizonatalRandom())
+        // maze.horizonatalRandom();
+    })
+    IDVerticalMazeTag.click(function() {
+        clearSelection();
+        maze.wallSides().then(result => maze.verticalRandom());
+    })
+    IDRandomMazeTag.click(function() {
+        clearSelection();
+        maze.random()
+    })
+}
+
+async function showAlert(message) {
+    AlertAlgoModal.html(message)
+    AlertAlgoModal.show();
+    await sleep(2000);
+    AlertAlgoModal.hide();
+}
+
+function algoSelect() {
+    IDAlgoBfsTag.click(function() {
+        algoToVisualize = 1;
+        showAlert('Classic BFS Selected');
+    })
+    IDAlgoDfsTag.click(function() {
+        algoToVisualize = 2;
+        showAlert('Classic DFS Selected')
+    })
+    IDAlgoAstarTag.click(function() {
+        algoToVisualize = 3;
+        showAlert('A-Star Selected')
     })
 }
 
 function setStartButton() {
     $('#start').click(function() {
-        console.log('start')
-        asphalt.dfs();
+        console.log('start');
+        if (algoToVisualize==1){
+            asphalt.bfs();
+        } else if (algoToVisualize==2) {
+            asphalt.dfs();
+        } else if (algoToVisualize==3) {
+            asphalt.astar();
+        } else {
+            console.error(`algoToVisualize has unkonwn value : ${algoToVisualize}`)
+        }
     })
 }
 
@@ -85,9 +124,12 @@ function init(){
     setBoxes();
     setStart();
     setEnd();
-    setRandomMazeGenerator();
-    setClear();
-    setStartButton();
+    if (once) {
+        setRandomMazeGenerator();
+        setClear();
+        algoSelect();
+        setStartButton();
+    }
 }
 
 

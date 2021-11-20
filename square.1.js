@@ -1,5 +1,5 @@
 class Square {
-    constructor(id, up, left) {
+    constructor(id, up, left, i, j) {
         this.element = id;
         // console.log('constructor - ',this.element)
         this.up = up;
@@ -9,21 +9,42 @@ class Square {
         this.isStart = false;
         this.isEnd = false;
         this.visited = false;
+        this.xCoord = j;
+        this.yCoord = i;
+        this.hCost = 0;
+        this.gCost = 0;
         $(this.element).click(
             this.toggleColor.bind(this)
         )
     }
-
+    _changeToDefault() {
+        this.element.css('background-color', SquareDefaultColor);
+        this.element.css('border-color', SquareDefaultBorderColor);
+        this.element.css('box-shadow','none')
+    }
+    _changeToSelected() {
+        this.element.css('background-color', SquareSelectedColor);
+        this.element.css('border-color', SquareSelectedBorderColor);
+    }
+    _changeToWall() {
+        this.element.css('box-shadow','2px 4px 5px 1px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)')
+        this.element.css('background-color', SquareWallColor);
+        this.element.css('border-color', SquareWallBorderColor);
+    }
+    _changeToPath() {
+        this.element.css('background-color', SquarePathColor);
+        this.element.css('border-color', SquarePathBorderColor);
+    }
     toggleColor(){
 
         if (this.isStart || this.isEnd)
             return
         if (!this.wall){
-            $(this.element).css('background-color','brown')
+            this._changeToWall()
             this.wall = true
         }
         else{
-            $(this.element).css('background-color', 'white')
+            this._changeToDefault()
             this.wall = false
         }
     }
@@ -32,19 +53,19 @@ class Square {
         this.visited = false;
         this.wall = false;
         if (this.isStart || this.isEnd) return;
-        $(this.element).css('background-color','white');
+        this._changeToDefault()
     }
 
     select() {
         this.visited = true;
         if (this.isStart || this.isEnd)
             return;
-        $(this.element).css('background-color','lightblue');
+        this._changeToSelected()
     }
 
     pathElement() {
         if (this.isStart || this.isEnd) return;
-        $(this.element).css('background-color','Yellow');
+        this._changeToPath()
     }
 
     deselect() {
@@ -52,24 +73,31 @@ class Square {
         if (this.isStart || this.isEnd || this.wall){
             return;
         }
-        $(this.element).css('background-color','white');
+        this._changeToDefault()
     }
     start() {
-        $(this.element).css('background-color','lightgreen');
+        this.element.css('background-color',SquareStartColor);
+        this.element.css('border-color',SquareStartBorderColor)
         this.isStart = true;
         this.isEnd = false;
     }
 
-
-
-
-
     end() {
-        $(this.element).css('background-color','red');
+        this.element.css('background-color',SquareEndColor);
+        this.element.css('border-color',SquareEndBorderColor);
         this.isEnd = true;
         this.isStart = false;
     }
     isWall() {
         return this.wall;
+    }
+
+    fCost() {
+        return this.hCost + this.gCost;
+    }
+    setHCost(square) {
+        if (square!=null)
+            this.hCost += square.hCost;
+        this.beforeElement = square;
     }
 }

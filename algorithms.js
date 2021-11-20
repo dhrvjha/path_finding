@@ -41,7 +41,7 @@ class Solution {
         let j = startIndex[1];
         let queue = [];
         queue.push([squares[i][j], null]);
-        console.log(squares[i][j],' ', i, j)
+        // console.log(squares[i][j],' ', i, j)
         while (queue.length!=0)
         {
             let size = queue.length;
@@ -77,6 +77,41 @@ class Solution {
 
     async aStar() {
         ;
+    }
+
+    async dijkstras() {
+        let i = startIndex[0];
+        let j = startIndex[1];
+
+        let heap = new Heap(squares.length, function(itemA, itemB){
+            return itemA[0].fCost() < itemB[0].fCost();
+        });
+        heap.push([squares[i][j], null]);
+        while (!heap.empty()) {
+            await sleep(5);
+            let top = heap.pop();
+            let topSquare = top[0];
+            if (topSquare.visited || topSquare.isWall())
+                continue;
+            topSquare.setHCost(top[1]);
+            if (topSquare.isEnd) {
+                this.traversePath(topSquare.beforeElement)
+                return;
+            }
+            topSquare.select();
+            if (topSquare.up != null) {
+                queue.push([topSquare.up, topSquare])
+            }
+            if (topSquare.down != null) {
+                queue.push([topSquare.down, topSquare])
+            }
+            if (topSquare.left != null) {AAA
+                queue.push([topSquare.left, topSquare])
+            }
+            if (topSquare.right != null) {
+                queue.push([topSquare.right, topSquare])
+            }
+        }
     }
 }
 

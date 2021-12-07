@@ -7,7 +7,7 @@ In this project, we need to find path between start (Red) and end (Green) node.
 ## How?
 Using HTML, CSS and ofcourse Javascript.
 
-When (page)[https://dhrvjha.github.io/path_finding/ "path finding site"] is loaded a graph is drawn of small squares
+When [page](https://dhrvjha.github.io/path_finding/ "path finding site") is loaded a graph is drawn of small squares
 we need to find path in this graph to meet end point.
 
 ## Challenges?

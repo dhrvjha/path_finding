@@ -69,7 +69,12 @@ function setRandomMazeGenerator() {
     })
 }
 
-async function showAlert(message) {
+async function showAlert(message, error=false) {
+    if (error) {
+        AlertAlgoModal.css('background-color', 'red')
+    } else {
+        AlertAlgoModal.css('background-color', 'lightgreen')
+    }
     AlertAlgoModal.html(message)
     AlertAlgoModal.show();
     await sleep(2000);
@@ -89,6 +94,10 @@ function algoSelect() {
         algoToVisualize = 3;
         showAlert('A-Star Selected')
     })
+    IDAlgoDijkstrasTag.click(function() {
+        algoToVisualize = 4;
+        showAlert('Dijkstras Selected')
+    })
 }
 
 function setStartButton() {
@@ -100,7 +109,10 @@ function setStartButton() {
             asphalt.dfs();
         } else if (algoToVisualize==3) {
             asphalt.astar();
+        } else if (algoToVisualize==4) {
+            asphalt.dijkstras();
         } else {
+            showAlert('Select Algorithm', true)
             console.error(`algoToVisualize has unkonwn value : ${algoToVisualize}`)
         }
     })

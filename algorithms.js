@@ -1,6 +1,4 @@
 
-
-
 class Solution {
 
     async traversePath(square) {
@@ -21,10 +19,10 @@ class Solution {
             let topSquare = top[0]
             if (topSquare == null || topSquare.visited || topSquare.isWall())
                 continue;
-            await sleep(5)
-            topSquare.beforeElement = top[1]
-            topSquare.visited = true
-            topSquare.select()
+            await sleep(5);
+            topSquare.beforeElement = top[1];
+            topSquare.visited = true;
+            topSquare.select();
             if (topSquare.isEnd){
                 this.traversePath(topSquare.beforeElement);
                 return;
@@ -47,29 +45,29 @@ class Solution {
             let size = queue.length;
             while (size--)
             {
-                await sleep(5)
+                await sleep(5);
                 let top = queue[0];
-                queue.shift()
+                queue.shift();
                 let topSquare = top[0];
                 if (topSquare.visited || topSquare.isWall())
                     continue;
                 topSquare.beforeElement = top[1];
                 if (topSquare.isEnd) {
-                    this.traversePath(topSquare.beforeElement)
+                    this.traversePath(topSquare.beforeElement);
                     return;
                 }
                 topSquare.select();
                 if (topSquare.up != null) {
-                    queue.push([topSquare.up, topSquare])
+                    queue.push([topSquare.up, topSquare]);
                 }
                 if (topSquare.down != null) {
-                    queue.push([topSquare.down, topSquare])
+                    queue.push([topSquare.down, topSquare]);
                 }
                 if (topSquare.left != null) {
-                    queue.push([topSquare.left, topSquare])
+                    queue.push([topSquare.left, topSquare]);
                 }
                 if (topSquare.right != null) {
-                    queue.push([topSquare.right, topSquare])
+                    queue.push([topSquare.right, topSquare]);
                 }
             }
         }
@@ -79,37 +77,50 @@ class Solution {
         ;
     }
 
-    async dijkstras() {
+    validNode(square) {
+        return square != null && !square.isWall() && !square.visited;
+    }
+
+    async dijkstras() {  // FIXME
         let i = startIndex[0];
         let j = startIndex[1];
 
-        let heap = new Heap(squares.length, function(itemA, itemB){
-            return itemA[0].fCost() < itemB[0].fCost();
+        let heap = new Heap(sizeX*sizeY, function(itemA, itemB) {
+            if (itemA.fCost() == itemB.fCost()) {
+                return itemA.hash_index < itemB.hash_index;
+            }
+            return itemA.fCost() < itemB.fCost();
         });
-        heap.push([squares[i][j], null]);
+
+        squares[i][j].setHCost(null);
+        // console.log(heap)
+        heap.push(squares[i][j]);
         while (!heap.empty()) {
             await sleep(5);
+            // console.log(heap)
             let top = heap.pop();
-            let topSquare = top[0];
-            if (topSquare.visited || topSquare.isWall())
-                continue;
-            topSquare.setHCost(top[1]);
+            let topSquare = top;
+            // console.log(topSquare)
             if (topSquare.isEnd) {
                 this.traversePath(topSquare.beforeElement)
                 return;
             }
             topSquare.select();
-            if (topSquare.up != null) {
-                queue.push([topSquare.up, topSquare])
+            if (this.validNode(topSquare.up)) {
+                topSquare.up.setHCost(topSquare);
+                heap.push(topSquare.up)
             }
-            if (topSquare.down != null) {
-                queue.push([topSquare.down, topSquare])
+            if (this.validNode(topSquare.down)) {
+                topSquare.down.setHCost(topSquare);
+                heap.push(topSquare.down)
             }
-            if (topSquare.left != null) {AAA
-                queue.push([topSquare.left, topSquare])
+            if (this.validNode(topSquare.left)) {
+                topSquare.left.setHCost(topSquare);
+                heap.push(topSquare.left)
             }
-            if (topSquare.right != null) {
-                queue.push([topSquare.right, topSquare])
+            if (this.validNode(topSquare.right)) {
+                topSquare.right.setHCost(topSquare);
+                heap.push(topSquare.right)
             }
         }
     }

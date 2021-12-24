@@ -16,8 +16,10 @@ let IDAlgorithmTag=$('#algorithm')
 let IDAlgoDfsTag=$('#classicDfs')
 let IDAlgoBfsTag=$('#classicBfs')
 let IDAlgoAstarTag=$('#aStar')
+let IDAlgoDijkstrasTag=$('#dijkstras')
 
 let maze;
+let weights;
 let asphalt;
 let once=true;
 let sizeX;
@@ -31,5 +33,6 @@ let squares = [[]];
  *  1       BFS;
  *  2       DFS;
  *  3       A*;
+ *  4       Dijkstras;
  */
 let algoToVisualize;

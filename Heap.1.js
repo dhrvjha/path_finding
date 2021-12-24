@@ -9,26 +9,35 @@ class Heap {
         this.container = [-1];
         this.compare = comparef;
         this.map = Array(size).fill(-1);
-        this.hash() = hash;
+        this.hash = hash;
+        this.index = 0;
     }
-
+    // TODO: complete duplicate
     duplicate(square) {
-        let id = this.hash();
+        let id = this.hash(square);
         return this.map[id] != -1;
     }
-    _swap(itemA, ai, itemB, bi) {
-        [itemA, itemB] = [itemB, itemA];
-        this.map[this.hash(itemA)] = bi;
-        this.map[this.hash(itemB)] = ai;
+    _swap(ai, bi) {
+        [this.container[ai], this.container[bi]] = [this.container[bi], this.container[ai]];
+        this.map[this.hash(this.container[ai])] = bi;
+        this.map[this.hash(this.container[bi])] = ai;
     }
     push(value) {
-        this.container.push(value);
+        // console.log(value)
+        // if (this.duplicate(value)) {
+        //     console.log(`Duplicate : ${value}`)
+        //     if (this.compare(value, this.map[this.hash(value)])) {
+        //       this.map[this.hash(value)].setHCost(value.hCost);
+        //     }
+        // }
+        // this.map[this.hash(value)] = this.size();
+        // value.heap_index = this.index++;
+        this.container.push(value); // FIXME : add duplicate
         let i = this.container.length-1;
         while (i>1) {
             let parentIndex = Math.floor(i/2);
             if (this.compare(this.container[i], this.container[parentIndex])) {
-                this._swap(this.container[parentIndex],
-                 parentIndex, this.container[i], i);
+                this._swap(parentIndex, i);
                 i = parentIndex;
             } else {
                 break;
@@ -46,6 +55,7 @@ class Heap {
         if (this.empty())
             throw new Error('Heap is empty');
         let res = this.top();
+        this.map[res] = -1;
         this._remove();
         return res;
     }
@@ -78,16 +88,17 @@ class Heap {
                 break;
             }
             if (this.compare(this.container[smallestChildIndex],this.container[i])) {
-                this._swap(this.container[i], i,
-                 this.container[smallestChildIndex], smallestChildIndex);
+                this._swap(i, smallestChildIndex);
                 i = smallestChildIndex;
             } else {
                 break;
             }
         }
     }
-
+    size() {
+        return this.container.length-1;
+    }
     empty() {
-        return this.container.length-1 == 0;
+        return this.size() == 0;
     }
 }
